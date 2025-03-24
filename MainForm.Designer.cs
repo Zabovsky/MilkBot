@@ -6,6 +6,8 @@
         private System.Windows.Forms.Label labelToken;
         private System.Windows.Forms.TextBox textBoxToken;
         private System.Windows.Forms.Button buttonStart;
+        private System.Windows.Forms.Button buttonStop;
+        private System.Windows.Forms.Label labelStatus;
         private System.Windows.Forms.TextBox textBoxCarton;
         private System.Windows.Forms.DateTimePicker dateTimePicker;
         private System.Windows.Forms.DataGridView dataGridViewSummary;
@@ -13,11 +15,20 @@
         private System.Windows.Forms.Button buttonWeek;
         private System.Windows.Forms.Button buttonMonth;
         private System.Windows.Forms.Button buttonYear;
+        private System.Windows.Forms.Button buttonAutoStart;
+
+        // Элементы для трей-иконки
+        private System.Windows.Forms.NotifyIcon notifyIcon;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStripTray;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemOpen;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemExit;
 
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
+            {
                 components.Dispose();
+            }
             base.Dispose(disposing);
         }
 
@@ -25,9 +36,13 @@
 
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             labelToken = new Label();
             textBoxToken = new TextBox();
             buttonStart = new Button();
+            buttonStop = new Button();
+            labelStatus = new Label();
             textBoxCarton = new TextBox();
             dateTimePicker = new DateTimePicker();
             dataGridViewSummary = new DataGridView();
@@ -35,136 +50,130 @@
             buttonWeek = new Button();
             buttonMonth = new Button();
             buttonYear = new Button();
-            label2 = new Label();
-            labelStatus = new Label();
-            buttonStop = new Button();
+            buttonAutoStart = new Button();
+            contextMenuStripTray = new ContextMenuStrip(components);
+            toolStripMenuItemOpen = new ToolStripMenuItem();
+            toolStripMenuItemExit = new ToolStripMenuItem();
+            notifyIcon = new NotifyIcon(components);
+            labelMilk = new Label();
             ((System.ComponentModel.ISupportInitialize)dataGridViewSummary).BeginInit();
+            contextMenuStripTray.SuspendLayout();
             SuspendLayout();
             // 
             // labelToken
             // 
-            labelToken.AutoSize = true;
-            labelToken.Location = new Point(12, 15);
+            resources.ApplyResources(labelToken, "labelToken");
             labelToken.Name = "labelToken";
-            labelToken.Size = new Size(41, 15);
-            labelToken.TabIndex = 0;
-            labelToken.Text = "Token:";
             // 
             // textBoxToken
             // 
-            textBoxToken.Location = new Point(70, 12);
+            resources.ApplyResources(textBoxToken, "textBoxToken");
             textBoxToken.Name = "textBoxToken";
-            textBoxToken.Size = new Size(219, 23);
-            textBoxToken.TabIndex = 1;
             // 
             // buttonStart
             // 
-            buttonStart.Location = new Point(297, 12);
+            resources.ApplyResources(buttonStart, "buttonStart");
             buttonStart.Name = "buttonStart";
-            buttonStart.Size = new Size(75, 23);
-            buttonStart.TabIndex = 2;
-            buttonStart.Text = "Запуск";
             buttonStart.UseVisualStyleBackColor = true;
             buttonStart.Click += buttonStart_Click;
             // 
+            // buttonStop
+            // 
+            resources.ApplyResources(buttonStop, "buttonStop");
+            buttonStop.Name = "buttonStop";
+            buttonStop.UseVisualStyleBackColor = true;
+            buttonStop.Click += buttonStop_Click;
+            // 
+            // labelStatus
+            // 
+            resources.ApplyResources(labelStatus, "labelStatus");
+            labelStatus.ForeColor = Color.Red;
+            labelStatus.Name = "labelStatus";
+            // 
             // textBoxCarton
             // 
-            textBoxCarton.Location = new Point(110, 51);
+            resources.ApplyResources(textBoxCarton, "textBoxCarton");
             textBoxCarton.Name = "textBoxCarton";
-            textBoxCarton.Size = new Size(100, 23);
-            textBoxCarton.TabIndex = 3;
-            textBoxCarton.Text = "1.0";
             // 
             // dateTimePicker
             // 
-            dateTimePicker.Location = new Point(12, 80);
+            resources.ApplyResources(dateTimePicker, "dateTimePicker");
             dateTimePicker.Name = "dateTimePicker";
-            dateTimePicker.Size = new Size(200, 23);
-            dateTimePicker.TabIndex = 5;
             // 
             // dataGridViewSummary
             // 
             dataGridViewSummary.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewSummary.Location = new Point(12, 109);
+            resources.ApplyResources(dataGridViewSummary, "dataGridViewSummary");
             dataGridViewSummary.Name = "dataGridViewSummary";
-            dataGridViewSummary.Size = new Size(360, 200);
-            dataGridViewSummary.TabIndex = 6;
             // 
             // buttonRefresh
             // 
-            buttonRefresh.Location = new Point(28, 315);
+            resources.ApplyResources(buttonRefresh, "buttonRefresh");
             buttonRefresh.Name = "buttonRefresh";
-            buttonRefresh.Size = new Size(114, 30);
-            buttonRefresh.TabIndex = 7;
-            buttonRefresh.Text = "Обновить (день)";
             buttonRefresh.UseVisualStyleBackColor = true;
             buttonRefresh.Click += buttonRefresh_Click;
             // 
             // buttonWeek
             // 
-            buttonWeek.Location = new Point(148, 315);
+            resources.ApplyResources(buttonWeek, "buttonWeek");
             buttonWeek.Name = "buttonWeek";
-            buttonWeek.Size = new Size(100, 30);
-            buttonWeek.TabIndex = 8;
-            buttonWeek.Text = "Неделя";
             buttonWeek.UseVisualStyleBackColor = true;
             buttonWeek.Click += buttonWeek_Click;
             // 
             // buttonMonth
             // 
-            buttonMonth.Location = new Point(254, 315);
+            resources.ApplyResources(buttonMonth, "buttonMonth");
             buttonMonth.Name = "buttonMonth";
-            buttonMonth.Size = new Size(100, 30);
-            buttonMonth.TabIndex = 9;
-            buttonMonth.Text = "Месяц";
             buttonMonth.UseVisualStyleBackColor = true;
             buttonMonth.Click += buttonMonth_Click;
             // 
             // buttonYear
             // 
-            buttonYear.Location = new Point(28, 355);
+            resources.ApplyResources(buttonYear, "buttonYear");
             buttonYear.Name = "buttonYear";
-            buttonYear.Size = new Size(100, 30);
-            buttonYear.TabIndex = 10;
-            buttonYear.Text = "Год";
             buttonYear.UseVisualStyleBackColor = true;
             buttonYear.Click += buttonYear_Click;
             // 
-            // label2
+            // buttonAutoStart
             // 
-            label2.AutoSize = true;
-            label2.Location = new Point(7, 54);
-            label2.Name = "label2";
-            label2.Size = new Size(97, 15);
-            label2.TabIndex = 12;
-            label2.Text = "В пачке молока:";
+            resources.ApplyResources(buttonAutoStart, "buttonAutoStart");
+            buttonAutoStart.Name = "buttonAutoStart";
+            buttonAutoStart.UseVisualStyleBackColor = true;
+            buttonAutoStart.Click += buttonAutoStart_Click;
             // 
-            // labelStatus
+            // contextMenuStripTray
             // 
-            labelStatus.AutoSize = true;
-            labelStatus.Location = new Point(275, 54);
-            labelStatus.Name = "labelStatus";
-            labelStatus.Size = new Size(90, 15);
-            labelStatus.TabIndex = 13;
-            labelStatus.Text = "Бот выключен!";
+            contextMenuStripTray.Items.AddRange(new ToolStripItem[] { toolStripMenuItemOpen, toolStripMenuItemExit });
+            contextMenuStripTray.Name = "contextMenuStripTray";
+            resources.ApplyResources(contextMenuStripTray, "contextMenuStripTray");
             // 
-            // buttonStop
+            // toolStripMenuItemOpen
             // 
-            buttonStop.Enabled = false;
-            buttonStop.Location = new Point(291, 80);
-            buttonStop.Name = "buttonStop";
-            buttonStop.Size = new Size(81, 23);
-            buttonStop.TabIndex = 14;
-            buttonStop.Text = "Остановить";
-            buttonStop.UseVisualStyleBackColor = true;
-            buttonStop.Click += buttonStop_Click;
+            toolStripMenuItemOpen.Name = "toolStripMenuItemOpen";
+            resources.ApplyResources(toolStripMenuItemOpen, "toolStripMenuItemOpen");
+            toolStripMenuItemOpen.Click += toolStripMenuItemOpen_Click;
+            // 
+            // toolStripMenuItemExit
+            // 
+            toolStripMenuItemExit.Name = "toolStripMenuItemExit";
+            resources.ApplyResources(toolStripMenuItemExit, "toolStripMenuItemExit");
+            toolStripMenuItemExit.Click += toolStripMenuItemExit_Click;
+            // 
+            // notifyIcon
+            // 
+            notifyIcon.ContextMenuStrip = contextMenuStripTray;
+            resources.ApplyResources(notifyIcon, "notifyIcon");
+            notifyIcon.DoubleClick += notifyIcon_DoubleClick;
+            // 
+            // labelMilk
+            // 
+            resources.ApplyResources(labelMilk, "labelMilk");
+            labelMilk.Name = "labelMilk";
             // 
             // MainForm
             // 
-            ClientSize = new Size(384, 391);
-            Controls.Add(buttonStop);
-            Controls.Add(labelStatus);
-            Controls.Add(label2);
+            resources.ApplyResources(this, "$this");
+            Controls.Add(labelMilk);
             Controls.Add(buttonYear);
             Controls.Add(buttonMonth);
             Controls.Add(buttonWeek);
@@ -172,21 +181,24 @@
             Controls.Add(dataGridViewSummary);
             Controls.Add(dateTimePicker);
             Controls.Add(textBoxCarton);
+            Controls.Add(labelStatus);
+            Controls.Add(buttonAutoStart);
+            Controls.Add(buttonStop);
             Controls.Add(buttonStart);
             Controls.Add(textBoxToken);
             Controls.Add(labelToken);
             Name = "MainForm";
-            Text = "Milk Bot";
             FormClosing += MainForm_FormClosing;
             Load += MainForm_Load;
+            Resize += MainForm_Resize;
             ((System.ComponentModel.ISupportInitialize)dataGridViewSummary).EndInit();
+            contextMenuStripTray.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
-        private Label label2;
-        private Label labelStatus;
-        private Button buttonStop;
+
+        private Label labelMilk;
     }
 }

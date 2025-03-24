@@ -1,7 +1,8 @@
 using System;
 using System.Data;
-using System.Threading.Tasks;
+using System.Drawing;
 using System.Windows.Forms;
+using Microsoft.Win32;
 
 namespace MilkBot
 {
@@ -14,17 +15,38 @@ namespace MilkBot
             InitializeComponent();
         }
 
-        // При загрузке формы загружаем сохранённый токен (если он был сохранён ранее)
-        // Загрузка токена при старте формы:
         private void MainForm_Load(object sender, EventArgs e)
         {
+            // Загружаем сохранённый токен, если он есть
             if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.Token))
             {
                 textBoxToken.Text = Properties.Settings.Default.Token;
             }
+            labelStatus.Text = "Бот не запущен";
+            labelStatus.ForeColor = Color.Red;
+
+            // Обновляем текст кнопки автозагрузки
+            buttonAutoStart.Text = IsAutoStartEnabled() ? "Удалить из автозагрузки" : "Добавить в автозагрузку";
+
+            // Если приложение запущено с аргументом /minimized, скрываем форму
+            string[] args = Environment.GetCommandLineArgs();
+            if (args.Length > 1 && args[1].Equals("/minimized", StringComparison.OrdinalIgnoreCase))
+            {
+                this.WindowState = FormWindowState.Minimized;
+                this.Hide();
+            }
         }
 
-        // Сохранение токена после запуска бота:
+        // Обработка изменения размера формы: при сворачивании скрываем окно
+        private void MainForm_Resize(object sender, EventArgs e)
+        {
+            if (this.WindowState == FormWindowState.Minimized)
+            {
+                this.Hide();
+                notifyIcon.Visible = true;
+            }
+        }
+
         private async void buttonStart_Click(object sender, EventArgs e)
         {
             string token = textBoxToken.Text.Trim();
@@ -39,71 +61,20 @@ namespace MilkBot
                 _botService = new TelegramBotService(token, this);
                 await _botService.StartAsync();
 
+                // Сохраняем токен
                 Properties.Settings.Default.Token = token;
                 Properties.Settings.Default.Save();
 
                 labelStatus.Text = "Бот запущен";
-                labelStatus.ForeColor = System.Drawing.Color.Green;
-                buttonStop.Enabled = true;
+                labelStatus.ForeColor = Color.Green;
+
                 buttonStart.Enabled = false;
+                buttonStop.Enabled = true;
             }
             catch (ArgumentException ex)
             {
                 MessageBox.Show($"Ошибка запуска бота: {ex.Message}");
-                labelStatus.Text = "Ошибка запуска бота";
-                labelStatus.ForeColor = System.Drawing.Color.Red;
             }
-        }
-
-        // Метод для получения настроенного объёма пачки (литры)
-        public decimal GetCartonAmount()
-        {
-            if (decimal.TryParse(textBoxCarton.Text, out decimal value))
-                return value;
-            return 1m;
-        }
-
-
-        // Обновление статистики за выбранный день с разбивкой по пользователям и итоговой суммой
-        private void buttonRefresh_Click(object sender, EventArgs e)
-        {
-            DateTime selectedDate = dateTimePicker.Value.Date;
-            DataTable summary = DataAccess.GetDailySummary(selectedDate);
-            dataGridViewSummary.DataSource = summary;
-        }
-
-        // Сводка за последнюю неделю
-        private void buttonWeek_Click(object sender, EventArgs e)
-        {
-            DateTime today = DateTime.Today;
-            DateTime startDate = today.AddDays(-6);
-            DataTable summary = DataAccess.GetPeriodSummary(startDate, today);
-            dataGridViewSummary.DataSource = summary;
-        }
-
-        // Сводка за последний месяц (30 дней)
-        private void buttonMonth_Click(object sender, EventArgs e)
-        {
-            DateTime today = DateTime.Today;
-            DateTime startDate = today.AddDays(-29);
-            DataTable summary = DataAccess.GetPeriodSummary(startDate, today);
-            dataGridViewSummary.DataSource = summary;
-        }
-
-        // Сводка за последний год (365 дней)
-        private void buttonYear_Click(object sender, EventArgs e)
-        {
-            DateTime today = DateTime.Today;
-            DateTime startDate = today.AddDays(-364);
-            DataTable summary = DataAccess.GetPeriodSummary(startDate, today);
-            dataGridViewSummary.DataSource = summary;
-        }
-
-        // Остановка работы бота при закрытии формы
-        private async void MainForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (_botService != null)
-                await _botService.StopAsync();
         }
 
         private async void buttonStop_Click(object sender, EventArgs e)
@@ -113,14 +84,127 @@ namespace MilkBot
                 await _botService.StopAsync();
                 _botService = null;
                 labelStatus.Text = "Бот остановлен";
-                labelStatus.ForeColor = System.Drawing.Color.Red;
-                buttonStop.Enabled = false;
+                labelStatus.ForeColor = Color.Red;
                 buttonStart.Enabled = true;
+                buttonStop.Enabled = false;
+            }
+        }
+
+        // Кнопка автозагрузки: добавление/удаление записи в реестре
+        private void buttonAutoStart_Click(object sender, EventArgs e)
+        {
+            bool isAutoStart = IsAutoStartEnabled();
+            if (isAutoStart)
+            {
+                SetAutoStart(false);
+                MessageBox.Show("Приложение удалено из автозагрузки.");
+                buttonAutoStart.Text = "Добавить в автозагрузку";
             }
             else
             {
-                MessageBox.Show("Бот уже остановлен или не запущен.");
+                SetAutoStart(true);
+                MessageBox.Show("Приложение добавлено в автозагрузку.");
+                buttonAutoStart.Text = "Удалить из автозагрузки";
             }
+        }
+
+        // Проверка автозагрузки через реестр
+        private bool IsAutoStartEnabled()
+        {
+            string runKey = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run";
+            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(runKey, false))
+            {
+                return key.GetValue(Application.ProductName) != null;
+            }
+        }
+
+        // Установка/удаление автозагрузки
+        private void SetAutoStart(bool enable)
+        {
+            string runKey = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run";
+            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(runKey, true))
+            {
+                if (enable)
+                {
+                    // Добавляем параметр /minimized, чтобы приложение запускалось свернутым
+                    key.SetValue(Application.ProductName, "\"" + Application.ExecutablePath + "\" /minimized");
+                }
+                else
+                {
+                    key.DeleteValue(Application.ProductName, false);
+                }
+            }
+        }
+
+        // Обработка двойного клика по NotifyIcon — восстанавливаем окно
+        private void notifyIcon_DoubleClick(object sender, EventArgs e)
+        {
+            ShowMainForm();
+        }
+
+        private void toolStripMenuItemOpen_Click(object sender, EventArgs e)
+        {
+            ShowMainForm();
+        }
+
+        private void toolStripMenuItemExit_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        // Метод для восстановления формы
+        private void ShowMainForm()
+        {
+            this.Show();
+            this.WindowState = FormWindowState.Normal;
+            this.BringToFront();
+        }
+
+        // Остальные методы для работы бота, статистики и т.д.
+
+        public decimal GetCartonAmount()
+        {
+            if (decimal.TryParse(textBoxCarton.Text, out decimal value))
+                return value;
+            return 1m;
+        }
+
+
+        private void buttonRefresh_Click(object sender, EventArgs e)
+        {
+            DateTime selectedDate = dateTimePicker.Value.Date;
+            DataTable summary = DataAccess.GetDailySummary(selectedDate);
+            dataGridViewSummary.DataSource = summary;
+        }
+
+        private void buttonWeek_Click(object sender, EventArgs e)
+        {
+            DateTime today = DateTime.Today;
+            DateTime startDate = today.AddDays(-6);
+            DataTable summary = DataAccess.GetPeriodSummary(startDate, today);
+            dataGridViewSummary.DataSource = summary;
+        }
+
+        private void buttonMonth_Click(object sender, EventArgs e)
+        {
+            DateTime today = DateTime.Today;
+            DateTime startDate = today.AddDays(-29);
+            DataTable summary = DataAccess.GetPeriodSummary(startDate, today);
+            dataGridViewSummary.DataSource = summary;
+        }
+
+        private void buttonYear_Click(object sender, EventArgs e)
+        {
+            DateTime today = DateTime.Today;
+            DateTime startDate = today.AddDays(-364);
+            DataTable summary = DataAccess.GetPeriodSummary(startDate, today);
+            dataGridViewSummary.DataSource = summary;
+        }
+
+        private async void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (_botService != null)
+                await _botService.StopAsync();
         }
     }
 }
