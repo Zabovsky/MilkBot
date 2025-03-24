@@ -1,0 +1,19 @@
+{
+  "version": 2,
+  "dgSpecHash": "qHLet1nDSv4=",
+  "success": true,
+  "projectFilePath": "E:\\Prodject\\MilkBot\\MilkBot.csproj",
+  "expectedPackageFiles": [
+    "E:\\Prodject\\NewsAggregator\\AuthApi\\packages\\microsoft.extensions.configuration.abstractions\\8.0.0\\microsoft.extensions.configuration.abstractions.8.0.0.nupkg.sha512",
+    "E:\\Prodject\\NewsAggregator\\AuthApi\\packages\\microsoft.extensions.configuration.binder\\8.0.0\\microsoft.extensions.configuration.binder.8.0.0.nupkg.sha512",
+    "E:\\Prodject\\NewsAggregator\\AuthApi\\packages\\microsoft.extensions.dependencyinjection.abstractions\\8.0.0\\microsoft.extensions.dependencyinjection.abstractions.8.0.0.nupkg.sha512",
+    "E:\\Prodject\\NewsAggregator\\AuthApi\\packages\\microsoft.extensions.options\\8.0.0\\microsoft.extensions.options.8.0.0.nupkg.sha512",
+    "E:\\Prodject\\NewsAggregator\\AuthApi\\packages\\microsoft.extensions.options.configurationextensions\\8.0.0\\microsoft.extensions.options.configurationextensions.8.0.0.nupkg.sha512",
+    "E:\\Prodject\\NewsAggregator\\AuthApi\\packages\\microsoft.extensions.primitives\\8.0.0\\microsoft.extensions.primitives.8.0.0.nupkg.sha512",
+    "E:\\Prodject\\NewsAggregator\\AuthApi\\packages\\stub.system.data.sqlite.core.netstandard\\1.0.119\\stub.system.data.sqlite.core.netstandard.1.0.119.nupkg.sha512",
+    "E:\\Prodject\\NewsAggregator\\AuthApi\\packages\\system.data.sqlite.core\\1.0.119\\system.data.sqlite.core.1.0.119.nupkg.sha512",
+    "E:\\Prodject\\NewsAggregator\\AuthApi\\packages\\system.text.json\\8.0.5\\system.text.json.8.0.5.nupkg.sha512",
+    "E:\\Prodject\\NewsAggregator\\AuthApi\\packages\\telegram.bot\\22.4.4\\telegram.bot.22.4.4.nupkg.sha512"
+  ],
+  "logs": []
+}
