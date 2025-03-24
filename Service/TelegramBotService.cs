@@ -43,13 +43,13 @@ namespace MilkBot
 
         private async Task UpdateHandler(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
         {
+            // Обработка текстовых сообщений
             if (update.Type == UpdateType.Message && update.Message.Text != null)
             {
                 string text = update.Message.Text.Trim();
-
-                // Если команда /start или кнопка "Вернуться на главную" – показываем главное меню
                 if (text == "/start" || text == "Вернуться на главную")
                 {
+                    // Главное меню: reply-клавиатура с двумя кнопками
                     var mainKeyboard = new ReplyKeyboardMarkup(new[]
                     {
                         new KeyboardButton[] { "Купил 1 л молока", "Статистика" }
@@ -65,13 +65,12 @@ namespace MilkBot
                         replyMarkup: mainKeyboard,
                         cancellationToken: cancellationToken);
                 }
-                // Если нажата кнопка покупки
                 else if (text == "Купил 1 л молока")
                 {
                     decimal cartonAmount = _form.GetCartonAmount();
                     string userId = update.Message.From.Id.ToString();
 
-                    // Формируем имя пользователя (FirstName + LastName, если есть)
+                    // Формируем имя пользователя из FirstName и (при наличии) LastName
                     string userName = update.Message.From.FirstName;
                     if (!string.IsNullOrEmpty(update.Message.From.LastName))
                         userName += " " + update.Message.From.LastName;
@@ -82,14 +81,88 @@ namespace MilkBot
                         text: $"Покупка зафиксирована: {cartonAmount} л молока.\nПользователь: {userName}",
                         cancellationToken: cancellationToken);
                 }
-                // Если нажата кнопка "Статистика" – показываем подменю статистики
                 else if (text == "Статистика")
                 {
-                    var statsKeyboard = new ReplyKeyboardMarkup(new[]
+                    // При выборе "Статистика" отправляем сообщение с inline‑клавиатурой
+                    var inlineKeyboard = new InlineKeyboardMarkup(new[]
                     {
-                        new KeyboardButton[] { "Статистика за день", "Статистика за неделю" },
-                        new KeyboardButton[] { "Статистика за месяц", "Статистика за год" },
-                        new KeyboardButton[] { "Вернуться на главную" }
+                        new []
+                        {
+                            InlineKeyboardButton.WithCallbackData("Статистика за день", "DAY"),
+                            InlineKeyboardButton.WithCallbackData("Статистика за неделю", "WEEK")
+                        },
+                        new []
+                        {
+                            InlineKeyboardButton.WithCallbackData("Статистика за месяц", "MONTH"),
+                            InlineKeyboardButton.WithCallbackData("Статистика за год", "YEAR")
+                        },
+                        new []
+                        {
+                            InlineKeyboardButton.WithCallbackData("Вернуться на главную", "BACK")
+                        }
+                    });
+
+                    await botClient.SendMessage(
+                        chatId: update.Message.Chat.Id,
+                        text: "Выберите период статистики:",
+                        replyMarkup: inlineKeyboard,
+                        cancellationToken: cancellationToken);
+                }
+            }
+            // Обработка callback-запросов от inline-кнопок
+            else if (update.Type == UpdateType.CallbackQuery)
+            {
+                var callback = update.CallbackQuery;
+                string data = callback.Data;
+
+                if (data == "DAY")
+                {
+                    DataTable dt = DataAccess.GetDailySummary(DateTime.Today);
+                    string stats = FormatSummary(dt, "Дневная статистика");
+                    await botClient.SendMessage(
+                        chatId: callback.Message.Chat.Id,
+                        text: stats,
+                        cancellationToken: cancellationToken);
+                }
+                else if (data == "WEEK")
+                {
+                    DateTime today = DateTime.Today;
+                    DateTime startDate = today.AddDays(-6);
+                    DataTable dt = DataAccess.GetPeriodSummary(startDate, today);
+                    string stats = FormatSummary(dt, "Статистика за неделю");
+                    await botClient.SendMessage(
+                        chatId: callback.Message.Chat.Id,
+                        text: stats,
+                        cancellationToken: cancellationToken);
+                }
+                else if (data == "MONTH")
+                {
+                    DateTime today = DateTime.Today;
+                    DateTime startDate = today.AddDays(-29);
+                    DataTable dt = DataAccess.GetPeriodSummary(startDate, today);
+                    string stats = FormatSummary(dt, "Статистика за месяц");
+                    await botClient.SendMessage(
+                        chatId: callback.Message.Chat.Id,
+                        text: stats,
+                        cancellationToken: cancellationToken);
+                }
+                else if (data == "YEAR")
+                {
+                    DateTime today = DateTime.Today;
+                    DateTime startDate = today.AddDays(-364);
+                    DataTable dt = DataAccess.GetPeriodSummary(startDate, today);
+                    string stats = FormatSummary(dt, "Статистика за год");
+                    await botClient.SendMessage(
+                        chatId: callback.Message.Chat.Id,
+                        text: stats,
+                        cancellationToken: cancellationToken);
+                }
+                else if (data == "BACK")
+                {
+                    // Возвращаем пользователя в главное меню (reply-клавиатура)
+                    var mainKeyboard = new ReplyKeyboardMarkup(new[]
+                    {
+                        new KeyboardButton[] { "Купил 1 л молока", "Статистика" }
                     })
                     {
                         ResizeKeyboard = true,
@@ -97,61 +170,17 @@ namespace MilkBot
                     };
 
                     await botClient.SendMessage(
-                        chatId: update.Message.Chat.Id,
-                        text: "Выберите период статистики:",
-                        replyMarkup: statsKeyboard,
+                        chatId: callback.Message.Chat.Id,
+                        text: "Главное меню:",
+                        replyMarkup: mainKeyboard,
                         cancellationToken: cancellationToken);
                 }
-                // Обработка статистики за день
-                else if (text == "Статистика за день")
-                {
-                    DataTable dt = DataAccess.GetDailySummary(DateTime.Today);
-                    string stats = FormatSummary(dt, "Дневная статистика");
-                    await botClient.SendMessage(
-                        chatId: update.Message.Chat.Id,
-                        text: stats,
-                        cancellationToken: cancellationToken);
-                }
-                // Обработка статистики за неделю
-                else if (text == "Статистика за неделю")
-                {
-                    DateTime today = DateTime.Today;
-                    DateTime startDate = today.AddDays(-6);
-                    DataTable dt = DataAccess.GetPeriodSummary(startDate, today);
-                    string stats = FormatSummary(dt, "Статистика за неделю");
-                    await botClient.SendMessage(
-                        chatId: update.Message.Chat.Id,
-                        text: stats,
-                        cancellationToken: cancellationToken);
-                }
-                // Обработка статистики за месяц
-                else if (text == "Статистика за месяц")
-                {
-                    DateTime today = DateTime.Today;
-                    DateTime startDate = today.AddDays(-29);
-                    DataTable dt = DataAccess.GetPeriodSummary(startDate, today);
-                    string stats = FormatSummary(dt, "Статистика за месяц");
-                    await botClient.SendMessage(
-                        chatId: update.Message.Chat.Id,
-                        text: stats,
-                        cancellationToken: cancellationToken);
-                }
-                // Обработка статистики за год
-                else if (text == "Статистика за год")
-                {
-                    DateTime today = DateTime.Today;
-                    DateTime startDate = today.AddDays(-364);
-                    DataTable dt = DataAccess.GetPeriodSummary(startDate, today);
-                    string stats = FormatSummary(dt, "Статистика за год");
-                    await botClient.SendMessage(
-                        chatId: update.Message.Chat.Id,
-                        text: stats,
-                        cancellationToken: cancellationToken);
-                }
+                // Ответ на callback-запрос для снятия "крутилки" в клиенте
+                await botClient.AnswerCallbackQuery(callback.Id, cancellationToken: cancellationToken);
             }
         }
 
-        // Вспомогательный метод для форматирования статистики в текстовое сообщение
+        // Вспомогательный метод для форматирования данных статистики в строку
         private string FormatSummary(DataTable dt, string header)
         {
             if (dt.Rows.Count == 0)

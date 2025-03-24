@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MilkBot")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6e450146bec0e68d587e8551592be70fd2349010")]
 [assembly: System.Reflection.AssemblyProductAttribute("MilkBot")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MilkBot")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

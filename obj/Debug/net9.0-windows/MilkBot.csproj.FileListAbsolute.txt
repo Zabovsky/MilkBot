@@ -22,3 +22,7 @@ E:\Prodject\MilkBot\obj\Debug\net9.0-windows\refint\MilkBot.dll
 E:\Prodject\MilkBot\obj\Debug\net9.0-windows\MilkBot.pdb
 E:\Prodject\MilkBot\obj\Debug\net9.0-windows\MilkBot.genruntimeconfig.cache
 E:\Prodject\MilkBot\obj\Debug\net9.0-windows\ref\MilkBot.dll
+E:\Prodject\MilkBot\bin\Debug\net9.0-windows\ru\MilkBot.resources.dll
+E:\Prodject\MilkBot\obj\Debug\net9.0-windows\MilkBot.MainForm.ru.resources
+E:\Prodject\MilkBot\obj\Debug\net9.0-windows\MilkBot.sourcelink.json
+E:\Prodject\MilkBot\obj\Debug\net9.0-windows\ru\MilkBot.resources.dll
