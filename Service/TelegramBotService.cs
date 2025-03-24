@@ -95,10 +95,6 @@ namespace MilkBot
                         {
                             InlineKeyboardButton.WithCallbackData("Статистика за месяц", "MONTH"),
                             InlineKeyboardButton.WithCallbackData("Статистика за год", "YEAR")
-                        },
-                        new []
-                        {
-                            InlineKeyboardButton.WithCallbackData("Вернуться на главную", "BACK")
                         }
                     });
 
@@ -111,7 +107,7 @@ namespace MilkBot
             }
             // Обработка callback-запросов от inline-кнопок
             else if (update.Type == UpdateType.CallbackQuery)
-            {
+            { 
                 var callback = update.CallbackQuery;
                 string data = callback.Data;
 
