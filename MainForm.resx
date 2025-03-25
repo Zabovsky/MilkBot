@@ -118,111 +118,60 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="labelToken.AutoSize" type="System.Boolean, mscorlib">
+  <data name="labelStatus.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="labelToken.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 15</value>
-  </data>
-  <data name="labelToken.Size" type="System.Drawing.Size, System.Drawing">
-    <value>41, 15</value>
-  </data>
-  <data name="labelToken.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="labelToken.Text" xml:space="preserve">
-    <value>Token:</value>
-  </data>
-  <data name="&gt;&gt;labelToken.Name" xml:space="preserve">
-    <value>labelToken</value>
-  </data>
-  <data name="&gt;&gt;labelToken.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;labelToken.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;labelToken.ZOrder" xml:space="preserve">
-    <value>14</value>
-  </data>
-  <data name="textBoxToken.Location" type="System.Drawing.Point, System.Drawing">
-    <value>70, 12</value>
-  </data>
-  <data name="textBoxToken.Size" type="System.Drawing.Size, System.Drawing">
-    <value>250, 23</value>
-  </data>
-  <data name="textBoxToken.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;textBoxToken.Name" xml:space="preserve">
-    <value>textBoxToken</value>
-  </data>
-  <data name="&gt;&gt;textBoxToken.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;textBoxToken.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;textBoxToken.ZOrder" xml:space="preserve">
-    <value>13</value>
-  </data>
-  <data name="buttonStart.Location" type="System.Drawing.Point, System.Drawing">
-    <value>330, 12</value>
-  </data>
-  <data name="buttonStart.Size" type="System.Drawing.Size, System.Drawing">
-    <value>75, 23</value>
-  </data>
-  <data name="buttonStart.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="buttonStart.Text" xml:space="preserve">
-    <value>Запуск</value>
-  </data>
-  <data name="&gt;&gt;buttonStart.Name" xml:space="preserve">
-    <value>buttonStart</value>
+  <data name="&gt;&gt;dateTimePicker.ZOrder" xml:space="preserve">
+    <value>7</value>
   </data>
   <data name="&gt;&gt;buttonStart.Type" xml:space="preserve">
     <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;buttonStart.Parent" xml:space="preserve">
-    <value>$this</value>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="labelToken.Size" type="System.Drawing.Size, System.Drawing">
+    <value>41, 15</value>
   </data>
-  <data name="&gt;&gt;buttonStart.ZOrder" xml:space="preserve">
-    <value>12</value>
+  <data name="&gt;&gt;labelStatus.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="buttonStop.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
+  <data name="labelToken.Text" xml:space="preserve">
+    <value>Token:</value>
   </data>
-  <data name="buttonStop.Location" type="System.Drawing.Point, System.Drawing">
-    <value>282, 41</value>
+  <data name="buttonRefresh.Text" xml:space="preserve">
+    <value>Обновить (день)</value>
   </data>
-  <data name="buttonStop.Size" type="System.Drawing.Size, System.Drawing">
-    <value>123, 23</value>
-  </data>
-  <data name="buttonStop.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="buttonStop.Text" xml:space="preserve">
-    <value>Остановить бота</value>
-  </data>
-  <data name="&gt;&gt;buttonStop.Name" xml:space="preserve">
-    <value>buttonStop</value>
-  </data>
-  <data name="&gt;&gt;buttonStop.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;buttonStop.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;buttonStop.ZOrder" xml:space="preserve">
-    <value>11</value>
-  </data>
-  <data name="labelStatus.AutoSize" type="System.Boolean, mscorlib">
+  <data name="labelToken.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="labelStatus.Location" type="System.Drawing.Point, System.Drawing">
-    <value>312, 67</value>
+  <data name="&gt;&gt;dataGridViewSummary.Name" xml:space="preserve">
+    <value>dataGridViewSummary</value>
+  </data>
+  <data name="&gt;&gt;buttonRefresh.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="toolStripMenuItemOpen.Size" type="System.Drawing.Size, System.Drawing">
+    <value>121, 22</value>
+  </data>
+  <data name="&gt;&gt;contextMenuStripTray.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;textBoxCarton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="buttonRefresh.TabIndex" type="System.Int32, mscorlib">
+    <value>10</value>
+  </data>
+  <data name="buttonMonth.Text" xml:space="preserve">
+    <value>Месяц</value>
+  </data>
+  <data name="dataGridViewSummary.TabIndex" type="System.Int32, mscorlib">
+    <value>9</value>
+  </data>
+  <data name="&gt;&gt;buttonWeek.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;textBoxToken.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="labelStatus.Size" type="System.Drawing.Size, System.Drawing">
     <value>93, 15</value>
@@ -230,107 +179,17 @@
   <data name="labelStatus.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
   </data>
-  <data name="labelStatus.Text" xml:space="preserve">
-    <value>Бот не запущен</value>
-  </data>
-  <data name="&gt;&gt;labelStatus.Name" xml:space="preserve">
-    <value>labelStatus</value>
-  </data>
-  <data name="&gt;&gt;labelStatus.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;labelStatus.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;labelStatus.ZOrder" xml:space="preserve">
-    <value>9</value>
-  </data>
-  <data name="textBoxCarton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>176, 42</value>
-  </data>
-  <data name="textBoxCarton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>100, 23</value>
-  </data>
-  <data name="textBoxCarton.TabIndex" type="System.Int32, mscorlib">
-    <value>6</value>
-  </data>
-  <data name="textBoxCarton.Text" xml:space="preserve">
-    <value>1.0</value>
-  </data>
-  <data name="&gt;&gt;textBoxCarton.Name" xml:space="preserve">
-    <value>textBoxCarton</value>
-  </data>
-  <data name="&gt;&gt;textBoxCarton.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;textBoxCarton.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;textBoxCarton.ZOrder" xml:space="preserve">
-    <value>8</value>
-  </data>
-  <data name="dateTimePicker.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 83</value>
-  </data>
-  <data name="dateTimePicker.Size" type="System.Drawing.Size, System.Drawing">
-    <value>200, 23</value>
-  </data>
-  <data name="dateTimePicker.TabIndex" type="System.Int32, mscorlib">
-    <value>8</value>
-  </data>
-  <data name="&gt;&gt;dateTimePicker.Name" xml:space="preserve">
-    <value>dateTimePicker</value>
-  </data>
-  <data name="&gt;&gt;dateTimePicker.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DateTimePicker, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;dateTimePicker.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;dateTimePicker.ZOrder" xml:space="preserve">
-    <value>7</value>
-  </data>
-  <data name="dataGridViewSummary.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 109</value>
-  </data>
-  <data name="dataGridViewSummary.Size" type="System.Drawing.Size, System.Drawing">
-    <value>393, 200</value>
-  </data>
-  <data name="dataGridViewSummary.TabIndex" type="System.Int32, mscorlib">
-    <value>9</value>
-  </data>
-  <data name="&gt;&gt;dataGridViewSummary.Name" xml:space="preserve">
-    <value>dataGridViewSummary</value>
+  <data name="textBoxToken.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
   </data>
   <data name="&gt;&gt;dataGridViewSummary.Type" xml:space="preserve">
     <value>System.Windows.Forms.DataGridView, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;dataGridViewSummary.Parent" xml:space="preserve">
-    <value>$this</value>
+  <data name="buttonMonth.Size" type="System.Drawing.Size, System.Drawing">
+    <value>72, 30</value>
   </data>
-  <data name="&gt;&gt;dataGridViewSummary.ZOrder" xml:space="preserve">
-    <value>6</value>
-  </data>
-  <data name="buttonRefresh.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 319</value>
-  </data>
-  <data name="buttonRefresh.Size" type="System.Drawing.Size, System.Drawing">
-    <value>113, 30</value>
-  </data>
-  <data name="buttonRefresh.TabIndex" type="System.Int32, mscorlib">
-    <value>10</value>
-  </data>
-  <data name="buttonRefresh.Text" xml:space="preserve">
-    <value>Обновить (день)</value>
-  </data>
-  <data name="&gt;&gt;buttonRefresh.Name" xml:space="preserve">
-    <value>buttonRefresh</value>
-  </data>
-  <data name="&gt;&gt;buttonRefresh.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;buttonRefresh.Parent" xml:space="preserve">
-    <value>$this</value>
+  <data name="textBoxCarton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>100, 23</value>
   </data>
   <data name="&gt;&gt;buttonRefresh.ZOrder" xml:space="preserve">
     <value>5</value>
@@ -338,126 +197,6 @@
   <data name="buttonWeek.Location" type="System.Drawing.Point, System.Drawing">
     <value>131, 319</value>
   </data>
-  <data name="buttonWeek.Size" type="System.Drawing.Size, System.Drawing">
-    <value>67, 30</value>
-  </data>
-  <data name="buttonWeek.TabIndex" type="System.Int32, mscorlib">
-    <value>11</value>
-  </data>
-  <data name="buttonWeek.Text" xml:space="preserve">
-    <value>Неделя</value>
-  </data>
-  <data name="&gt;&gt;buttonWeek.Name" xml:space="preserve">
-    <value>buttonWeek</value>
-  </data>
-  <data name="&gt;&gt;buttonWeek.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;buttonWeek.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;buttonWeek.ZOrder" xml:space="preserve">
-    <value>4</value>
-  </data>
-  <data name="buttonMonth.Location" type="System.Drawing.Point, System.Drawing">
-    <value>204, 319</value>
-  </data>
-  <data name="buttonMonth.Size" type="System.Drawing.Size, System.Drawing">
-    <value>72, 30</value>
-  </data>
-  <data name="buttonMonth.TabIndex" type="System.Int32, mscorlib">
-    <value>12</value>
-  </data>
-  <data name="buttonMonth.Text" xml:space="preserve">
-    <value>Месяц</value>
-  </data>
-  <data name="&gt;&gt;buttonMonth.Name" xml:space="preserve">
-    <value>buttonMonth</value>
-  </data>
-  <data name="&gt;&gt;buttonMonth.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;buttonMonth.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;buttonMonth.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="buttonYear.Location" type="System.Drawing.Point, System.Drawing">
-    <value>282, 319</value>
-  </data>
-  <data name="buttonYear.Size" type="System.Drawing.Size, System.Drawing">
-    <value>70, 30</value>
-  </data>
-  <data name="buttonYear.TabIndex" type="System.Int32, mscorlib">
-    <value>13</value>
-  </data>
-  <data name="buttonYear.Text" xml:space="preserve">
-    <value>Год</value>
-  </data>
-  <data name="&gt;&gt;buttonYear.Name" xml:space="preserve">
-    <value>buttonYear</value>
-  </data>
-  <data name="&gt;&gt;buttonYear.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;buttonYear.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;buttonYear.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="buttonAutoStart.Location" type="System.Drawing.Point, System.Drawing">
-    <value>218, 83</value>
-  </data>
-  <data name="buttonAutoStart.Size" type="System.Drawing.Size, System.Drawing">
-    <value>187, 23</value>
-  </data>
-  <data name="buttonAutoStart.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="buttonAutoStart.Text" xml:space="preserve">
-    <value>Автозагрузка</value>
-  </data>
-  <data name="&gt;&gt;buttonAutoStart.Name" xml:space="preserve">
-    <value>buttonAutoStart</value>
-  </data>
-  <data name="&gt;&gt;buttonAutoStart.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;buttonAutoStart.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;buttonAutoStart.ZOrder" xml:space="preserve">
-    <value>10</value>
-  </data>
-  <metadata name="contextMenuStripTray.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
-  <data name="contextMenuStripTray.Size" type="System.Drawing.Size, System.Drawing">
-    <value>122, 48</value>
-  </data>
-  <data name="&gt;&gt;contextMenuStripTray.Name" xml:space="preserve">
-    <value>contextMenuStripTray</value>
-  </data>
-  <data name="&gt;&gt;contextMenuStripTray.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="toolStripMenuItemOpen.Size" type="System.Drawing.Size, System.Drawing">
-    <value>121, 22</value>
-  </data>
-  <data name="toolStripMenuItemOpen.Text" xml:space="preserve">
-    <value>Открыть</value>
-  </data>
-  <data name="toolStripMenuItemExit.Size" type="System.Drawing.Size, System.Drawing">
-    <value>121, 22</value>
-  </data>
-  <data name="toolStripMenuItemExit.Text" xml:space="preserve">
-    <value>Выход</value>
-  </data>
-  <metadata name="notifyIcon.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>187, 17</value>
-  </metadata>
   <data name="notifyIcon.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         AAABAAEAEBAAAAAAIAAoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAA
@@ -481,47 +220,203 @@
         /wD///8A
 </value>
   </data>
-  <data name="notifyIcon.Text" xml:space="preserve">
-    <value>Milk Bot</value>
+  <data name="&gt;&gt;labelToken.Name" xml:space="preserve">
+    <value>labelToken</value>
   </data>
-  <data name="notifyIcon.Visible" type="System.Boolean, mscorlib">
-    <value>True</value>
+  <data name="buttonWeek.Size" type="System.Drawing.Size, System.Drawing">
+    <value>67, 30</value>
+  </data>
+  <data name="&gt;&gt;buttonYear.Name" xml:space="preserve">
+    <value>buttonYear</value>
+  </data>
+  <data name="dataGridViewSummary.Location" type="System.Drawing.Point, System.Drawing">
+    <value>12, 109</value>
+  </data>
+  <data name="&gt;&gt;labelStatus.ZOrder" xml:space="preserve">
+    <value>9</value>
+  </data>
+  <data name="&gt;&gt;buttonRefresh.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;buttonStart.Name" xml:space="preserve">
+    <value>buttonStart</value>
+  </data>
+  <data name="&gt;&gt;$this.Name" xml:space="preserve">
+    <value>MainFormNew</value>
+  </data>
+  <data name="buttonAutoStart.Text" xml:space="preserve">
+    <value>Автозагрузка</value>
+  </data>
+  <data name="labelStatus.Location" type="System.Drawing.Point, System.Drawing">
+    <value>312, 67</value>
+  </data>
+  <data name="&gt;&gt;buttonMonth.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;textBoxToken.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="buttonStart.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="&gt;&gt;labelToken.ZOrder" xml:space="preserve">
+    <value>14</value>
   </data>
   <data name="labelMilk.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="labelMilk.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 45</value>
+  <data name="buttonWeek.Text" xml:space="preserve">
+    <value>Неделя</value>
   </data>
-  <data name="labelMilk.Size" type="System.Drawing.Size, System.Drawing">
-    <value>164, 15</value>
+  <data name="&gt;&gt;buttonStop.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="labelMilk.TabIndex" type="System.Int32, mscorlib">
-    <value>14</value>
+  <data name="&gt;&gt;buttonAutoStart.ZOrder" xml:space="preserve">
+    <value>10</value>
   </data>
-  <data name="labelMilk.Text" xml:space="preserve">
-    <value>Количество молока в пачке:</value>
+  <data name="&gt;&gt;buttonStart.ZOrder" xml:space="preserve">
+    <value>12</value>
   </data>
-  <data name="&gt;&gt;labelMilk.Name" xml:space="preserve">
-    <value>labelMilk</value>
+  <data name="&gt;&gt;textBoxCarton.Name" xml:space="preserve">
+    <value>textBoxCarton</value>
   </data>
-  <data name="&gt;&gt;labelMilk.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="textBoxToken.Location" type="System.Drawing.Point, System.Drawing">
+    <value>70, 12</value>
+  </data>
+  <data name="&gt;&gt;buttonStop.Name" xml:space="preserve">
+    <value>buttonStop</value>
+  </data>
+  <data name="buttonRefresh.Location" type="System.Drawing.Point, System.Drawing">
+    <value>12, 319</value>
+  </data>
+  <data name="buttonYear.TabIndex" type="System.Int32, mscorlib">
+    <value>13</value>
+  </data>
+  <data name="&gt;&gt;labelToken.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;textBoxToken.Name" xml:space="preserve">
+    <value>textBoxToken</value>
+  </data>
+  <data name="&gt;&gt;dataGridViewSummary.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="buttonYear.Size" type="System.Drawing.Size, System.Drawing">
+    <value>70, 30</value>
+  </data>
+  <data name="&gt;&gt;buttonWeek.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="textBoxCarton.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="&gt;&gt;labelStatus.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;toolStripMenuItemExit.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;labelMilk.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
+  <data name="dateTimePicker.TabIndex" type="System.Int32, mscorlib">
+    <value>8</value>
+  </data>
+  <data name="buttonStop.Location" type="System.Drawing.Point, System.Drawing">
+    <value>282, 41</value>
+  </data>
+  <data name="buttonStop.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="textBoxCarton.Text" xml:space="preserve">
+    <value>1.0</value>
+  </data>
+  <data name="&gt;&gt;toolStripMenuItemOpen.Name" xml:space="preserve">
+    <value>toolStripMenuItemOpen</value>
+  </data>
+  <data name="buttonMonth.Location" type="System.Drawing.Point, System.Drawing">
+    <value>204, 319</value>
+  </data>
+  <data name="&gt;&gt;textBoxCarton.ZOrder" xml:space="preserve">
+    <value>8</value>
+  </data>
+  <data name="&gt;&gt;labelStatus.Name" xml:space="preserve">
+    <value>labelStatus</value>
+  </data>
+  <data name="&gt;&gt;buttonMonth.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="labelStatus.Text" xml:space="preserve">
+    <value>Бот не запущен</value>
+  </data>
+  <data name="&gt;&gt;toolStripMenuItemOpen.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="textBoxToken.Size" type="System.Drawing.Size, System.Drawing">
+    <value>250, 23</value>
+  </data>
+  <data name="buttonStop.Text" xml:space="preserve">
+    <value>Остановить бота</value>
+  </data>
+  <data name="&gt;&gt;dateTimePicker.Name" xml:space="preserve">
+    <value>dateTimePicker</value>
+  </data>
+  <data name="labelMilk.Size" type="System.Drawing.Size, System.Drawing">
+    <value>164, 15</value>
+  </data>
+  <data name="buttonStart.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="toolStripMenuItemOpen.Text" xml:space="preserve">
+    <value>Открыть</value>
+  </data>
+  <data name="$this.Text" xml:space="preserve">
+    <value>Milk Bot</value>
+  </data>
+  <data name="labelToken.Location" type="System.Drawing.Point, System.Drawing">
+    <value>12, 15</value>
+  </data>
+  <data name="buttonYear.Text" xml:space="preserve">
+    <value>Год</value>
+  </data>
+  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
+    <value>420, 356</value>
+  </data>
+  <data name="contextMenuStripTray.Size" type="System.Drawing.Size, System.Drawing">
+    <value>122, 48</value>
+  </data>
+  <data name="notifyIcon.Visible" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="&gt;&gt;buttonWeek.Name" xml:space="preserve">
+    <value>buttonWeek</value>
+  </data>
+  <data name="&gt;&gt;buttonWeek.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="toolStripMenuItemExit.Size" type="System.Drawing.Size, System.Drawing">
+    <value>121, 22</value>
+  </data>
+  <data name="&gt;&gt;textBoxToken.ZOrder" xml:space="preserve">
+    <value>13</value>
+  </data>
   <data name="&gt;&gt;labelMilk.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
-  <metadata name="$this.Language" type="System.Globalization.CultureInfo, System.Private.CoreLib, Culture=neutral, PublicKeyToken=7cec85d7bea7798e">
-    <value>ru</value>
-  </metadata>
-  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>420, 356</value>
+  <data name="labelMilk.Location" type="System.Drawing.Point, System.Drawing">
+    <value>12, 45</value>
+  </data>
+  <data name="&gt;&gt;buttonAutoStart.Name" xml:space="preserve">
+    <value>buttonAutoStart</value>
+  </data>
+  <data name="buttonWeek.TabIndex" type="System.Int32, mscorlib">
+    <value>11</value>
+  </data>
+  <data name="&gt;&gt;buttonMonth.Name" xml:space="preserve">
+    <value>buttonMonth</value>
+  </data>
+  <data name="&gt;&gt;buttonMonth.ZOrder" xml:space="preserve">
+    <value>3</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -5034,31 +4929,136 @@
         AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
 </value>
   </data>
-  <data name="$this.Text" xml:space="preserve">
-    <value>Milk Bot</value>
+  <data name="&gt;&gt;buttonStop.ZOrder" xml:space="preserve">
+    <value>11</value>
   </data>
-  <data name="&gt;&gt;toolStripMenuItemOpen.Name" xml:space="preserve">
-    <value>toolStripMenuItemOpen</value>
+  <data name="&gt;&gt;buttonAutoStart.Parent" xml:space="preserve">
+    <value>$this</value>
   </data>
-  <data name="&gt;&gt;toolStripMenuItemOpen.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;toolStripMenuItemExit.Name" xml:space="preserve">
-    <value>toolStripMenuItemExit</value>
-  </data>
-  <data name="&gt;&gt;toolStripMenuItemExit.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;notifyIcon.Name" xml:space="preserve">
-    <value>notifyIcon</value>
-  </data>
-  <data name="&gt;&gt;notifyIcon.Type" xml:space="preserve">
-    <value>System.Windows.Forms.NotifyIcon, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;$this.Name" xml:space="preserve">
-    <value>MainForm</value>
+  <data name="toolStripMenuItemExit.Text" xml:space="preserve">
+    <value>Выход</value>
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
     <value>System.Windows.Forms.Form, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="textBoxCarton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>176, 42</value>
+  </data>
+  <data name="dateTimePicker.Size" type="System.Drawing.Size, System.Drawing">
+    <value>200, 23</value>
+  </data>
+  <data name="&gt;&gt;dateTimePicker.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DateTimePicker, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;buttonYear.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;notifyIcon.Type" xml:space="preserve">
+    <value>System.Windows.Forms.NotifyIcon, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="notifyIcon.Text" xml:space="preserve">
+    <value>Milk Bot</value>
+  </data>
+  <data name="labelMilk.TabIndex" type="System.Int32, mscorlib">
+    <value>14</value>
+  </data>
+  <data name="buttonStart.Text" xml:space="preserve">
+    <value>Запуск</value>
+  </data>
+  <data name="&gt;&gt;buttonStart.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="labelMilk.Text" xml:space="preserve">
+    <value>Количество молока в пачке:</value>
+  </data>
+  <data name="&gt;&gt;buttonAutoStart.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;buttonStop.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;buttonYear.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="buttonAutoStart.Location" type="System.Drawing.Point, System.Drawing">
+    <value>218, 83</value>
+  </data>
+  <data name="buttonStop.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="labelToken.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="buttonStart.Location" type="System.Drawing.Point, System.Drawing">
+    <value>330, 12</value>
+  </data>
+  <data name="&gt;&gt;toolStripMenuItemExit.Name" xml:space="preserve">
+    <value>toolStripMenuItemExit</value>
+  </data>
+  <data name="dateTimePicker.Location" type="System.Drawing.Point, System.Drawing">
+    <value>12, 83</value>
+  </data>
+  <data name="buttonYear.Location" type="System.Drawing.Point, System.Drawing">
+    <value>282, 319</value>
+  </data>
+  <data name="&gt;&gt;textBoxCarton.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;labelMilk.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;dateTimePicker.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;dataGridViewSummary.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="&gt;&gt;labelToken.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;contextMenuStripTray.Name" xml:space="preserve">
+    <value>contextMenuStripTray</value>
+  </data>
+  <data name="&gt;&gt;buttonRefresh.Name" xml:space="preserve">
+    <value>buttonRefresh</value>
+  </data>
+  <data name="buttonAutoStart.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;buttonYear.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="dataGridViewSummary.Size" type="System.Drawing.Size, System.Drawing">
+    <value>393, 200</value>
+  </data>
+  <data name="buttonAutoStart.Size" type="System.Drawing.Size, System.Drawing">
+    <value>187, 23</value>
+  </data>
+  <data name="&gt;&gt;notifyIcon.Name" xml:space="preserve">
+    <value>notifyIcon</value>
+  </data>
+  <data name="buttonMonth.TabIndex" type="System.Int32, mscorlib">
+    <value>12</value>
+  </data>
+  <data name="buttonStop.Size" type="System.Drawing.Size, System.Drawing">
+    <value>123, 23</value>
+  </data>
+  <data name="&gt;&gt;labelMilk.Name" xml:space="preserve">
+    <value>labelMilk</value>
+  </data>
+  <data name="buttonRefresh.Size" type="System.Drawing.Size, System.Drawing">
+    <value>113, 30</value>
+  </data>
+  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="contextMenuStripTray.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
+  <metadata name="$this.Language" type="System.Globalization.CultureInfo, System.Private.CoreLib, Culture=neutral, PublicKeyToken=7cec85d7bea7798e">
+    <value>ru</value>
+  </metadata>
+  <metadata name="notifyIcon.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>187, 17</value>
+  </metadata>
 </root>

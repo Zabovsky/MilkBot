@@ -6,11 +6,11 @@ using Microsoft.Win32;
 
 namespace MilkBot
 {
-    public partial class MainForm : Form
+    public partial class MainFormNew : Form
     {
         private TelegramBotService _botService;
 
-        public MainForm()
+        public MainFormNew()
         {
             InitializeComponent();
         }
@@ -32,6 +32,23 @@ namespace MilkBot
             string[] args = Environment.GetCommandLineArgs();
             if (args.Length > 1 && args[1].Equals("/minimized", StringComparison.OrdinalIgnoreCase))
             {
+                if(textBoxToken.Text != null || textBoxToken.Text!= "") {
+                string token = textBoxToken.Text.Trim();
+                if (string.IsNullOrWhiteSpace(token))
+                {
+                    MessageBox.Show("Введите корректный токен для запуска бота.");
+                    return;
+                }
+                try
+                {
+                    StartBot(token);
+                }
+                catch (ArgumentException ex)
+                {
+                    MessageBox.Show($"Ошибка запуска бота: {ex.Message}");
+                } 
+                
+                }
                 this.WindowState = FormWindowState.Minimized;
                 this.Hide();
             }
@@ -58,6 +75,17 @@ namespace MilkBot
 
             try
             {
+                StartBot(token);
+            }
+            catch (ArgumentException ex)
+            {
+                MessageBox.Show($"Ошибка запуска бота: {ex.Message}");
+            }
+        }
+        public async void StartBot(string token)
+        {
+            try
+            {
                 _botService = new TelegramBotService(token, this);
                 await _botService.StartAsync();
 
@@ -76,7 +104,6 @@ namespace MilkBot
                 MessageBox.Show($"Ошибка запуска бота: {ex.Message}");
             }
         }
-
         private async void buttonStop_Click(object sender, EventArgs e)
         {
             if (_botService != null)

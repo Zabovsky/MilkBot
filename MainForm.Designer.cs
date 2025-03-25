@@ -1,6 +1,6 @@
 ﻿namespace MilkBot
 {
-    partial class MainForm
+    partial class MainFormNew
     {
         private System.ComponentModel.IContainer components = null;
         private System.Windows.Forms.Label labelToken;
@@ -37,7 +37,7 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainFormNew));
             labelToken = new Label();
             textBoxToken = new TextBox();
             buttonStart = new Button();
@@ -102,8 +102,8 @@
             // 
             // dataGridViewSummary
             // 
-            dataGridViewSummary.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             resources.ApplyResources(dataGridViewSummary, "dataGridViewSummary");
+            dataGridViewSummary.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridViewSummary.Name = "dataGridViewSummary";
             // 
             // buttonRefresh
@@ -143,26 +143,26 @@
             // 
             // contextMenuStripTray
             // 
+            resources.ApplyResources(contextMenuStripTray, "contextMenuStripTray");
             contextMenuStripTray.Items.AddRange(new ToolStripItem[] { toolStripMenuItemOpen, toolStripMenuItemExit });
             contextMenuStripTray.Name = "contextMenuStripTray";
-            resources.ApplyResources(contextMenuStripTray, "contextMenuStripTray");
             // 
             // toolStripMenuItemOpen
             // 
-            toolStripMenuItemOpen.Name = "toolStripMenuItemOpen";
             resources.ApplyResources(toolStripMenuItemOpen, "toolStripMenuItemOpen");
+            toolStripMenuItemOpen.Name = "toolStripMenuItemOpen";
             toolStripMenuItemOpen.Click += toolStripMenuItemOpen_Click;
             // 
             // toolStripMenuItemExit
             // 
-            toolStripMenuItemExit.Name = "toolStripMenuItemExit";
             resources.ApplyResources(toolStripMenuItemExit, "toolStripMenuItemExit");
+            toolStripMenuItemExit.Name = "toolStripMenuItemExit";
             toolStripMenuItemExit.Click += toolStripMenuItemExit_Click;
             // 
             // notifyIcon
             // 
-            notifyIcon.ContextMenuStrip = contextMenuStripTray;
             resources.ApplyResources(notifyIcon, "notifyIcon");
+            notifyIcon.ContextMenuStrip = contextMenuStripTray;
             notifyIcon.DoubleClick += notifyIcon_DoubleClick;
             // 
             // labelMilk
@@ -170,7 +170,7 @@
             resources.ApplyResources(labelMilk, "labelMilk");
             labelMilk.Name = "labelMilk";
             // 
-            // MainForm
+            // MainFormNew
             // 
             resources.ApplyResources(this, "$this");
             Controls.Add(labelMilk);
@@ -187,7 +187,7 @@
             Controls.Add(buttonStart);
             Controls.Add(textBoxToken);
             Controls.Add(labelToken);
-            Name = "MainForm";
+            Name = "MainFormNew";
             FormClosing += MainForm_FormClosing;
             Load += MainForm_Load;
             Resize += MainForm_Resize;

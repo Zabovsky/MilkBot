@@ -13,9 +13,9 @@ namespace MilkBot
     {
         private readonly TelegramBotClient _botClient;
         private CancellationTokenSource _cts;
-        private MainForm _form;
+        private MainFormNew _form;
 
-        public TelegramBotService(string token, MainForm form)
+        public TelegramBotService(string token, MainFormNew form)
         {
             token = token.Trim();
             if (string.IsNullOrEmpty(token))
