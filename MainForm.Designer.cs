@@ -56,6 +56,9 @@
             toolStripMenuItemExit = new ToolStripMenuItem();
             notifyIcon = new NotifyIcon(components);
             labelMilk = new Label();
+            textBoxIdAdmin = new TextBox();
+            label1 = new Label();
+            buttonUser = new Button();
             ((System.ComponentModel.ISupportInitialize)dataGridViewSummary).BeginInit();
             contextMenuStripTray.SuspendLayout();
             SuspendLayout();
@@ -170,9 +173,29 @@
             resources.ApplyResources(labelMilk, "labelMilk");
             labelMilk.Name = "labelMilk";
             // 
+            // textBoxIdAdmin
+            // 
+            resources.ApplyResources(textBoxIdAdmin, "textBoxIdAdmin");
+            textBoxIdAdmin.Name = "textBoxIdAdmin";
+            // 
+            // label1
+            // 
+            resources.ApplyResources(label1, "label1");
+            label1.Name = "label1";
+            // 
+            // buttonUser
+            // 
+            resources.ApplyResources(buttonUser, "buttonUser");
+            buttonUser.Name = "buttonUser";
+            buttonUser.UseVisualStyleBackColor = true;
+            buttonUser.Click += buttonUser_Click;
+            // 
             // MainFormNew
             // 
             resources.ApplyResources(this, "$this");
+            Controls.Add(buttonUser);
+            Controls.Add(label1);
+            Controls.Add(textBoxIdAdmin);
             Controls.Add(labelMilk);
             Controls.Add(buttonYear);
             Controls.Add(buttonMonth);
@@ -200,5 +223,8 @@
         #endregion
 
         private Label labelMilk;
+        private TextBox textBoxIdAdmin;
+        private Label label1;
+        private Button buttonUser;
     }
 }

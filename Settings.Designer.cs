@@ -37,5 +37,20 @@ namespace MilkBot.Properties
                 this["Token"] = value;
             }
         }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string AdminId
+        {
+            get
+            {
+                return ((string)(this["AdminId"]));
+            }
+            set
+            {
+                this["AdminId"] = value;
+            }
+        }
     }
 }

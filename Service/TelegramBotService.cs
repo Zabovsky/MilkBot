@@ -1,21 +1,29 @@
-﻿using System;
+﻿using MilkBot.TelegramMarkup;
 using System.Data;
-using System.Threading;
-using System.Threading.Tasks;
 using Telegram.Bot;
+using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
-using Telegram.Bot.Types.ReplyMarkups;
 
 namespace MilkBot
 {
     public class TelegramBotService
     {
-        private readonly TelegramBotClient _botClient;
         private CancellationTokenSource _cts;
         private MainFormNew _form;
+        private readonly long _adminId;
+        private bool _wasRestartedOnce = false;
+        private bool _isManualRestarting = false;
+        private string _editTargetUserId;
+        private long _editAdminUserId;
+        private readonly TelegramBotClient _botClient;
+        private int? _lastAdminMessageId;
+        private string _lastAdminMessageText;
+        private readonly Dictionary<string, DateTime> _lastBuyTime = new();
+        private readonly TimeSpan _cooldown = TimeSpan.FromSeconds(10);
+        private string _lastHandledCallbackId;
 
-        public TelegramBotService(string token, MainFormNew form)
+        public TelegramBotService(string token, MainFormNew form, long adminId = 0)
         {
             token = token.Trim();
             if (string.IsNullOrEmpty(token))
@@ -23,15 +31,13 @@ namespace MilkBot
 
             _botClient = new TelegramBotClient(token);
             _form = form;
+            _adminId = adminId;
         }
 
         public async Task StartAsync()
         {
             _cts = new CancellationTokenSource();
-            _botClient.StartReceiving(
-                updateHandler: UpdateHandler,
-                errorHandler: ErrorHandler,
-                cancellationToken: _cts.Token);
+            _botClient.StartReceiving(UpdateHandler, ErrorHandler, cancellationToken: _cts.Token);
             Console.WriteLine("Бот запущен");
         }
 
@@ -41,142 +47,395 @@ namespace MilkBot
             await Task.CompletedTask;
         }
 
-        private async Task UpdateHandler(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
+        private async Task UpdateHandler(ITelegramBotClient _, Update update, CancellationToken cancellationToken)
         {
-            // Обработка текстовых сообщений
             if (update.Type == UpdateType.Message && update.Message.Text != null)
             {
                 string text = update.Message.Text.Trim();
+
+                if (!string.IsNullOrEmpty(_editTargetUserId) && update.Message.From.Id == _editAdminUserId)
+                {
+                    if (decimal.TryParse(text, out decimal newValue))
+                    {
+                        bool result = DataAccess.ReplaceTodayAmount(_editTargetUserId, newValue);
+                        await _botClient.SendMessage(update.Message.Chat.Id,
+                            result ? $"✅ Обновлено: теперь {_editTargetUserId} имеет {newValue} л за сегодня."
+                                   : $"❌ Не удалось обновить данные.");
+                    }
+                    else
+                    {
+                        await _botClient.SendMessage(update.Message.Chat.Id, "Введите корректное число (например: 2.5)");
+                    }
+
+                    _editTargetUserId = null;
+                    _editAdminUserId = 0;
+                    return;
+                }
+
                 if (text == "/start" || text == "Вернуться на главную")
                 {
-                    // Главное меню: reply-клавиатура с двумя кнопками
                     var mainKeyboard = new ReplyKeyboardMarkup(new[]
                     {
-                        new KeyboardButton[] { "Купил 1 л молока", "Статистика" }
+                        new[] { new KeyboardButton("Купил 1 л молока"), new KeyboardButton("Статистика") }
                     })
                     {
-                        ResizeKeyboard = true,
-                        OneTimeKeyboard = false
+                        ResizeKeyboard = true
                     };
 
-                    await botClient.SendMessage(
-                        chatId: update.Message.Chat.Id,
-                        text: "Привет! Выберите действие:",
-                        replyMarkup: mainKeyboard,
-                        cancellationToken: cancellationToken);
+                    await _botClient.SendMessage(update.Message.Chat.Id, "Привет! Выберите действие:",
+                        replyMarkup: MarkupAdapter.ToTelegramReply(mainKeyboard));
                 }
                 else if (text == "Купил 1 л молока")
                 {
-                    decimal cartonAmount = _form.GetCartonAmount();
                     string userId = update.Message.From.Id.ToString();
+                    if (_lastBuyTime.TryGetValue(userId, out var lastTime))
+                    {
+                        if (DateTime.Now - lastTime < _cooldown)
+                        {
+                            await _botClient.SendMessage(update.Message.Chat.Id, "⏳ Подождите немного перед следующей покупкой.");
+                            return;
+                        }
+                    }
+                    _lastBuyTime[userId] = DateTime.Now;
 
-                    // Формируем имя пользователя из FirstName и (при наличии) LastName
+                    decimal cartonAmount = _form.GetCartonAmount();
                     string userName = update.Message.From.FirstName;
                     if (!string.IsNullOrEmpty(update.Message.From.LastName))
                         userName += " " + update.Message.From.LastName;
 
-                    DataAccess.AddTransaction(userId, userName, "BUY", cartonAmount);
-                    await botClient.SendMessage(
-                        chatId: update.Message.Chat.Id,
-                        text: $"Покупка зафиксирована: {cartonAmount} л молока.\nПользователь: {userName}",
-                        cancellationToken: cancellationToken);
+                    DataAccess.AddTransaction(userId, userName, "BUY", cartonAmount, DateTime.Now);
+
+                    var keyboard = new InlineKeyboardMarkup(new[]
+                    {
+                        new[] { InlineKeyboardButton.WithCallbackData("❌ Отменить покупку", $"CANCEL_BUY:{userId}") }
+                    });
+
+                    await _botClient.SendMessage(update.Message.Chat.Id,
+                        $"Покупка зафиксирована: {cartonAmount} л молока.",
+                        replyMarkup: MarkupAdapter.ToTelegramInline(keyboard));
                 }
+
                 else if (text == "Статистика")
                 {
-                    // При выборе "Статистика" отправляем сообщение с inline‑клавиатурой
-                    var inlineKeyboard = new InlineKeyboardMarkup(new[]
+                    var keyboard = new InlineKeyboardMarkup(new[]
                     {
-                        new []
-                        {
+                        new[] {
                             InlineKeyboardButton.WithCallbackData("Статистика за день", "DAY"),
                             InlineKeyboardButton.WithCallbackData("Статистика за неделю", "WEEK")
                         },
-                        new []
-                        {
+                        new[] {
                             InlineKeyboardButton.WithCallbackData("Статистика за месяц", "MONTH"),
                             InlineKeyboardButton.WithCallbackData("Статистика за год", "YEAR")
                         }
                     });
 
-                    await botClient.SendMessage(
-                        chatId: update.Message.Chat.Id,
-                        text: "Выберите период статистики:",
-                        replyMarkup: inlineKeyboard,
-                        cancellationToken: cancellationToken);
+                    await _botClient.SendMessage(update.Message.Chat.Id,
+                        "Выберите период статистики:",
+                        replyMarkup: MarkupAdapter.ToTelegramInline(keyboard));
                 }
+                else if (text == "/admin" && update.Message.From.Id == _adminId)
+                {
+                    var keyboard = new InlineKeyboardMarkup(new[]
+                    {
+                        new[] {
+                            InlineKeyboardButton.WithCallbackData("🔁 Перезапустить бота", "RESTART_BOT"),
+                            InlineKeyboardButton.WithCallbackData("♻ Перезапустить приложение", "RESTART_APP")
+                        }
+                    });
+
+                    await _botClient.SendMessage(update.Message.Chat.Id, "🛠 Админ-панель:",
+                        replyMarkup: MarkupAdapter.ToTelegramInline(keyboard));
+                }
+                else if (text == "/правка" && update.Message.From.Id == _adminId)
+                {
+                    var dt = DataAccess.GetDailySummary(DateTime.Today);
+                    if (dt.Rows.Count == 0)
+                    {
+                        await _botClient.SendMessage(update.Message.Chat.Id, "Сегодня никто ничего не покупал.");
+                        return;
+                    }
+
+                    var buttons = new List<InlineKeyboardButton[]>();
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        if (row["UserId"].ToString() == "") continue;
+
+                        string userId = row["UserId"].ToString();
+                        string userName = row["UserName"].ToString();
+                        decimal amount = Convert.ToDecimal(row["TotalBought"]);
+
+                        buttons.Add(new[]
+                        {
+                            InlineKeyboardButton.WithCallbackData($"{userName} — {amount} л", $"EDIT:{userId}")
+                        });
+                    }
+
+                    var markup = new InlineKeyboardMarkup(buttons);
+                    await _botClient.SendMessage(update.Message.Chat.Id,
+                        "✏️ Выберите пользователя для редактирования:",
+                        replyMarkup: MarkupAdapter.ToTelegramInline(markup));
+                }
+
+
+
+
             }
-            // Обработка callback-запросов от inline-кнопок
-            else if (update.Type == UpdateType.CallbackQuery)
-            { 
+
+            if (update.Type == UpdateType.CallbackQuery)
+            {
                 var callback = update.CallbackQuery;
-                string data = callback.Data;
+                var data = callback.Data;
 
-                if (data == "DAY")
+                if (data == "RESTART_BOT")
                 {
-                    DataTable dt = DataAccess.GetDailySummary(DateTime.Today);
-                    string stats = FormatSummary(dt, "Дневная статистика");
-                    await botClient.SendMessage(
-                        chatId: callback.Message.Chat.Id,
-                        text: stats,
-                        cancellationToken: cancellationToken);
-                }
-                else if (data == "WEEK")
-                {
-                    DateTime today = DateTime.Today;
-                    DateTime startDate = today.AddDays(-6);
-                    DataTable dt = DataAccess.GetPeriodSummary(startDate, today);
-                    string stats = FormatSummary(dt, "Статистика за неделю");
-                    await botClient.SendMessage(
-                        chatId: callback.Message.Chat.Id,
-                        text: stats,
-                        cancellationToken: cancellationToken);
-                }
-                else if (data == "MONTH")
-                {
-                    DateTime today = DateTime.Today;
-                    DateTime startDate = today.AddDays(-29);
-                    DataTable dt = DataAccess.GetPeriodSummary(startDate, today);
-                    string stats = FormatSummary(dt, "Статистика за месяц");
-                    await botClient.SendMessage(
-                        chatId: callback.Message.Chat.Id,
-                        text: stats,
-                        cancellationToken: cancellationToken);
-                }
-                else if (data == "YEAR")
-                {
-                    DateTime today = DateTime.Today;
-                    DateTime startDate = today.AddDays(-364);
-                    DataTable dt = DataAccess.GetPeriodSummary(startDate, today);
-                    string stats = FormatSummary(dt, "Статистика за год");
-                    await botClient.SendMessage(
-                        chatId: callback.Message.Chat.Id,
-                        text: stats,
-                        cancellationToken: cancellationToken);
-                }
-                else if (data == "BACK")
-                {
-                    // Возвращаем пользователя в главное меню (reply-клавиатура)
-                    var mainKeyboard = new ReplyKeyboardMarkup(new[]
+                    if (_adminId > 0 && callback.From.Id == _adminId)
                     {
-                        new KeyboardButton[] { "Купил 1 л молока", "Статистика" }
-                    })
-                    {
-                        ResizeKeyboard = true,
-                        OneTimeKeyboard = false
-                    };
+                        if (_isManualRestarting)
+                        {
+                            await _botClient.AnswerCallbackQuery(callback.Id, "⏳ Уже выполняется перезапуск.");
+                            return;
+                        }
+                        else if (IsDuplicateCallback(callback.Id))
+                        {
+                            Console.WriteLine("[INFO] Callback уже обработан ранее — RESTART_BOT");
+                            return;
+                        }
 
-                    await botClient.SendMessage(
-                        chatId: callback.Message.Chat.Id,
-                        text: "Главное меню:",
-                        replyMarkup: mainKeyboard,
-                        cancellationToken: cancellationToken);
+                        _isManualRestarting = true;
+
+                        await _botClient.AnswerCallbackQuery(callback.Id);
+                        await SendToAdminIfChanged("🔁 Перезапускаю бота...");
+                        await RestartBot();
+
+                        _isManualRestarting = false;
+                    }
+                    return;
                 }
-                // Ответ на callback-запрос для снятия "крутилки" в клиенте
-                await botClient.AnswerCallbackQuery(callback.Id, cancellationToken: cancellationToken);
+                else if (data == "RESTART_APP")
+                {
+                    if (_adminId > 0 && callback.From.Id == _adminId)
+                    {
+                        if (IsDuplicateCallback(callback.Id))
+                        {
+                            Console.WriteLine("[INFO] Callback уже обработан ранее — RESTART_APP");
+                            return;
+                        }
+
+                        await _botClient.SendMessage(callback.Message.Chat.Id, "♻ Перезапускаю приложение...");
+                        RestartApplication();
+                    }
+                    else
+                    {
+                        await _botClient.AnswerCallbackQuery(callback.Id, "Недостаточно прав.", showAlert: true);
+                    }
+                }
+
+
+
+                if (data.StartsWith("CANCEL_BUY:"))
+                {
+                    string userId = data.Split(':')[1];
+                    if (callback.From.Id.ToString() != userId)
+                    {
+                        await _botClient.AnswerCallbackQuery(callback.Id, "Эта кнопка не для вас.", showAlert: true);
+                        return;
+                    }
+
+                    bool success = DataAccess.CancelLastBuy(userId);
+                    if (success)
+                    {
+                        await _botClient.EditMessageText(callback.Message.Chat.Id, callback.Message.MessageId, "✅ Последняя покупка отменена.");
+                    }
+                    else
+                    {
+                        await _botClient.AnswerCallbackQuery(callback.Id, "❌ Отмена недоступна. Возможно, прошло больше часа.", showAlert: true);
+                    }
+                }
+                else if (data.StartsWith("EDIT:"))
+                {
+                    _editTargetUserId = data.Substring("EDIT:".Length);
+                    _editAdminUserId = callback.From.Id;
+
+                    await _botClient.SendMessage(callback.Message.Chat.Id,
+                        $"Введите новое количество литров для пользователя {_editTargetUserId} (например: `2.5`)",
+                        parseMode: ParseMode.Markdown);
+                }
+                else
+                {
+                    await HandleStatistics(data, callback);
+                }
+
+                await _botClient.AnswerCallbackQuery(callback.Id);
+            }
+        }
+        private static readonly string LastCallbackFile = "last_callback_id.txt";
+
+        private bool IsDuplicateCallback(string callbackId)
+        {
+            try
+            {
+                if (File.Exists(LastCallbackFile))
+                {
+                    string last = File.ReadAllText(LastCallbackFile);
+                    if (last == callbackId)
+                        return true;
+                }
+
+                File.WriteAllText(LastCallbackFile, callbackId);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("[ERROR] Не удалось проверить или сохранить callback ID: " + ex.Message);
+            }
+
+            return false;
+        }
+
+
+        private void RestartApplication()
+        {
+            try
+            {
+                string exePath = Environment.ProcessPath ?? Application.ExecutablePath;
+
+                // передаём специальный аргумент --restarted
+                System.Diagnostics.Process.Start(exePath, "/minimized --restarted");
+
+                Environment.Exit(0); // Завершаем текущий процесс
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Ошибка при перезапуске приложения: " + ex.Message);
+                _botClient.SendMessage(_adminId, $"❌ *Ошибка в боте:*```{ex.Message}```",
+               parseMode: ParseMode.Markdown);
             }
         }
 
-        // Вспомогательный метод для форматирования данных статистики в строку
+
+        private async Task HandleStatistics(string data, CallbackQuery callback)
+        {
+            DateTime today = DateTime.Today;
+            DataTable dt = null;
+            string header = "";
+
+            if (data == "DAY")
+            {
+                dt = DataAccess.GetDailySummary(today);
+                header = "Дневная статистика";
+            }
+            else if (data == "WEEK")
+            {
+                dt = DataAccess.GetPeriodSummary(today.AddDays(-6), today);
+                header = "Статистика за неделю";
+            }
+            else if (data == "MONTH")
+            {
+                dt = DataAccess.GetPeriodSummary(today.AddDays(-29), today);
+                header = "Статистика за месяц";
+            }
+            else if (data == "YEAR")
+            {
+                dt = DataAccess.GetPeriodSummary(today.AddDays(-364), today);
+                header = "Статистика за год";
+            }
+
+            if (dt != null)
+            {
+                string summary = FormatSummary(dt, header);
+                await _botClient.SendMessage(callback.Message.Chat.Id, summary);
+            }
+        }
+
+        private async Task SendToAdminIfChanged(string text)
+        {
+            if (_adminId == 0) return;
+
+            if (_lastAdminMessageText == text)
+                return;
+
+            var msg = await _botClient.SendMessage(_adminId, text);
+            _lastAdminMessageId = msg.MessageId;
+            _lastAdminMessageText = text;
+        }
+
+        private async Task RestartBot()
+        {
+            await StopAsync();
+            await Task.Delay(1000);
+            await StartAsync();
+            _wasRestartedOnce = false;
+        }
+
+        //private async Task ErrorHandler(ITelegramBotClient _, Exception exception, HandleErrorSource source, CancellationToken cancellationToken)
+        //{
+        //    Console.WriteLine($"[Ошибка бота] {source}: {exception.Message}");
+        //    File.AppendAllText("bot_errors.log", $"[{DateTime.Now}] {source}: {exception}");
+
+        //    if (!_wasRestartedOnce)
+        //    {
+        //        _wasRestartedOnce = true;
+        //        try
+        //        {
+        //            await SendToAdminIfChanged("⚠ Обнаружена ошибка, пробую перезапустить бота...");
+        //            await RestartBot();
+        //            return;
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            await SendToAdminIfChanged($"❌ Ошибка повторилась после перезапуска:`{ ex.Message}`");
+        //        }
+        //    }
+        //    else
+        //    {
+        //        var keyboard = MarkupAdapter.ToTelegramInline(new InlineKeyboardMarkup(new[]
+        //        {
+        //            new[] {
+        //                InlineKeyboardButton.WithCallbackData("🔁 Перезапустить бота", "RESTART_BOT"),
+        //                InlineKeyboardButton.WithCallbackData("♻ Перезапустить приложение", "RESTART_APP")
+        //            }
+        //        }));
+
+        //        await _botClient.SendMessage(_adminId,$"❌ *Ошибка в боте:*```{ exception.Message}```",
+        //            parseMode: ParseMode.Markdown,
+        //            replyMarkup: keyboard);
+        //    }
+        //}
+
+        private async Task ErrorHandler(ITelegramBotClient _, Exception exception, HandleErrorSource source, CancellationToken cancellationToken)
+        {
+            Console.WriteLine($"[Ошибка бота] {source}: {exception.Message}");
+            File.AppendAllText("bot_errors.log", $"[{DateTime.Now}] {source}: {exception}\n");
+
+            // Просто уведомляем админа, без перезапуска
+            if (_adminId > 0)
+            {
+                var keyboard = MarkupAdapter.ToTelegramInline(new InlineKeyboardMarkup(new[]
+                {
+            new[]
+            {
+                InlineKeyboardButton.WithCallbackData("🔁 Перезапустить бота", "RESTART_BOT"),
+                InlineKeyboardButton.WithCallbackData("♻ Перезапустить приложение", "RESTART_APP")
+            }
+        }));
+
+                try
+                {
+                    await _botClient.SendMessage(
+                        chatId: _adminId,
+                        text: $"❌ *Ошибка в боте:*\n```\n{exception.Message}```",
+                        parseMode: ParseMode.Markdown,
+                        replyMarkup: keyboard,
+                        cancellationToken: cancellationToken);
+                }
+                catch (Exception ex)
+                {
+                    await _botClient.SendMessage(_adminId, $"❌ *Ошибка в боте:*```{exception.Message}```",
+                        parseMode: ParseMode.Markdown,
+                        replyMarkup: keyboard);
+                }
+            }
+        }
+
         private string FormatSummary(DataTable dt, string header)
         {
             if (dt.Rows.Count == 0)
@@ -189,13 +448,9 @@ namespace MilkBot
                 decimal total = Convert.ToDecimal(row["TotalBought"]);
                 result += $"{userName}: {total} л\n";
             }
-            return result;
+
+            return result.TrimEnd(); // убираем последний \n на всякий случай
         }
 
-        private Task ErrorHandler(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
-        {
-            Console.WriteLine($"Ошибка: {exception.Message}");
-            return Task.CompletedTask;
-        }
     }
 }

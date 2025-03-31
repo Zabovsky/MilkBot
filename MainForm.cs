@@ -1,8 +1,5 @@
-using System;
+п»їusing Microsoft.Win32;
 using System.Data;
-using System.Drawing;
-using System.Windows.Forms;
-using Microsoft.Win32;
 
 namespace MilkBot
 {
@@ -15,46 +12,50 @@ namespace MilkBot
             InitializeComponent();
         }
 
-        private void MainForm_Load(object sender, EventArgs e)
+        private async void MainForm_Load(object sender, EventArgs e)
         {
-            // Загружаем сохранённый токен, если он есть
-            if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.Token))
-            {
-                textBoxToken.Text = Properties.Settings.Default.Token;
-            }
-            labelStatus.Text = "Бот не запущен";
+            // Р—Р°РіСЂСѓР¶Р°РµРј СЃРѕС…СЂР°РЅС‘РЅРЅС‹Рµ РЅР°СЃС‚СЂРѕР№РєРё
+            string token = Properties.Settings.Default.Token?.Trim();
+            string adminIdText = Properties.Settings.Default.AdminId?.Trim();
+
+            if (!string.IsNullOrWhiteSpace(token))
+                textBoxToken.Text = token;
+
+            if (!string.IsNullOrWhiteSpace(adminIdText))
+                textBoxIdAdmin.Text = adminIdText;
+
+            labelStatus.Text = "Р‘РѕС‚ РЅРµ Р·Р°РїСѓС‰РµРЅ";
             labelStatus.ForeColor = Color.Red;
 
-            // Обновляем текст кнопки автозагрузки
-            buttonAutoStart.Text = IsAutoStartEnabled() ? "Удалить из автозагрузки" : "Добавить в автозагрузку";
+            // РћР±РЅРѕРІР»СЏРµРј РЅР°РґРїРёСЃСЊ РЅР° РєРЅРѕРїРєРµ Р°РІС‚РѕР·Р°РїСѓСЃРєР°
+            buttonAutoStart.Text = IsAutoStartEnabled()
+                ? "РЈРґР°Р»РёС‚СЊ РёР· Р°РІС‚РѕР·Р°РіСЂСѓР·РєРё"
+                : "Р”РѕР±Р°РІРёС‚СЊ РІ Р°РІС‚РѕР·Р°РіСЂСѓР·РєСѓ";
 
-            // Если приложение запущено с аргументом /minimized, скрываем форму
+            // Р’СЃРµРіРґР° РїС‹С‚Р°РµРјСЃСЏ Р·Р°РїСѓСЃС‚РёС‚СЊ Р±РѕС‚Р°, РµСЃР»Рё С‚РѕРєРµРЅ СѓРєР°Р·Р°РЅ
+            if (!string.IsNullOrWhiteSpace(token))
+            {
+                try
+                {
+                    StartBot(token, adminIdText);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"РћС€РёР±РєР° РїСЂРё Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРѕРј Р·Р°РїСѓСЃРєРµ Р±РѕС‚Р°:\n{ex.Message}", "РћС€РёР±РєР°", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+
+            // РџСЂРѕРІРµСЂРєР° Р°СЂРіСѓРјРµРЅС‚РѕРІ вЂ” СЃРєСЂС‹С‚РёРµ РІ С‚СЂРµР№
             string[] args = Environment.GetCommandLineArgs();
             if (args.Length > 1 && args[1].Equals("/minimized", StringComparison.OrdinalIgnoreCase))
             {
-                if(textBoxToken.Text != null || textBoxToken.Text!= "") {
-                string token = textBoxToken.Text.Trim();
-                if (string.IsNullOrWhiteSpace(token))
-                {
-                    MessageBox.Show("Введите корректный токен для запуска бота.");
-                    return;
-                }
-                try
-                {
-                    StartBot(token);
-                }
-                catch (ArgumentException ex)
-                {
-                    MessageBox.Show($"Ошибка запуска бота: {ex.Message}");
-                } 
-                
-                }
                 this.WindowState = FormWindowState.Minimized;
                 this.Hide();
             }
         }
 
-        // Обработка изменения размера формы: при сворачивании скрываем окно
+
+        // РћР±СЂР°Р±РѕС‚РєР° РёР·РјРµРЅРµРЅРёСЏ СЂР°Р·РјРµСЂР° С„РѕСЂРјС‹: РїСЂРё СЃРІРѕСЂР°С‡РёРІР°РЅРёРё СЃРєСЂС‹РІР°РµРј РѕРєРЅРѕ
         private void MainForm_Resize(object sender, EventArgs e)
         {
             if (this.WindowState == FormWindowState.Minimized)
@@ -67,33 +68,42 @@ namespace MilkBot
         private async void buttonStart_Click(object sender, EventArgs e)
         {
             string token = textBoxToken.Text.Trim();
+            string adminIdText = textBoxIdAdmin.Text.Trim();
             if (string.IsNullOrWhiteSpace(token))
             {
-                MessageBox.Show("Введите корректный токен для запуска бота.");
+                MessageBox.Show("Р’РІРµРґРёС‚Рµ РєРѕСЂСЂРµРєС‚РЅС‹Р№ С‚РѕРєРµРЅ РґР»СЏ Р·Р°РїСѓСЃРєР° Р±РѕС‚Р°.");
                 return;
             }
-
+            if (!long.TryParse(adminIdText, out long adminId))
+            {
+                MessageBox.Show("Р’РІРµРґРёС‚Рµ РєРѕСЂСЂРµРєС‚РЅС‹Р№ Telegram ID Р°РґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂР°.");
+                return;
+            }
             try
             {
-                StartBot(token);
+                StartBot(token, adminIdText);
             }
             catch (ArgumentException ex)
             {
-                MessageBox.Show($"Ошибка запуска бота: {ex.Message}");
+                MessageBox.Show($"РћС€РёР±РєР° Р·Р°РїСѓСЃРєР° Р±РѕС‚Р°: {ex.Message}");
             }
         }
-        public async void StartBot(string token)
+        public async void StartBot(string token, string adminIdText)
         {
             try
             {
-                _botService = new TelegramBotService(token, this);
-                await _botService.StartAsync();
 
-                // Сохраняем токен
+
+                // РЎРѕС…СЂР°РЅСЏРµРј РЅР°СЃС‚СЂРѕР№РєРё
                 Properties.Settings.Default.Token = token;
+                Properties.Settings.Default.AdminId = adminIdText;
                 Properties.Settings.Default.Save();
 
-                labelStatus.Text = "Бот запущен";
+                // Р·Р°РїСѓСЃРєР°РµРј Р±РѕС‚Р°
+                _botService = new TelegramBotService(token, this, Convert.ToInt64(adminIdText));
+                await _botService.StartAsync();
+
+                labelStatus.Text = "Р‘РѕС‚ Р·Р°РїСѓС‰РµРЅ";
                 labelStatus.ForeColor = Color.Green;
 
                 buttonStart.Enabled = false;
@@ -101,7 +111,7 @@ namespace MilkBot
             }
             catch (ArgumentException ex)
             {
-                MessageBox.Show($"Ошибка запуска бота: {ex.Message}");
+                MessageBox.Show($"РћС€РёР±РєР° Р·Р°РїСѓСЃРєР° Р±РѕС‚Р°: {ex.Message}");
             }
         }
         private async void buttonStop_Click(object sender, EventArgs e)
@@ -110,32 +120,32 @@ namespace MilkBot
             {
                 await _botService.StopAsync();
                 _botService = null;
-                labelStatus.Text = "Бот остановлен";
+                labelStatus.Text = "Р‘РѕС‚ РѕСЃС‚Р°РЅРѕРІР»РµРЅ";
                 labelStatus.ForeColor = Color.Red;
                 buttonStart.Enabled = true;
                 buttonStop.Enabled = false;
             }
         }
 
-        // Кнопка автозагрузки: добавление/удаление записи в реестре
+        // РљРЅРѕРїРєР° Р°РІС‚РѕР·Р°РіСЂСѓР·РєРё: РґРѕР±Р°РІР»РµРЅРёРµ/СѓРґР°Р»РµРЅРёРµ Р·Р°РїРёСЃРё РІ СЂРµРµСЃС‚СЂРµ
         private void buttonAutoStart_Click(object sender, EventArgs e)
         {
             bool isAutoStart = IsAutoStartEnabled();
             if (isAutoStart)
             {
                 SetAutoStart(false);
-                MessageBox.Show("Приложение удалено из автозагрузки.");
-                buttonAutoStart.Text = "Добавить в автозагрузку";
+                MessageBox.Show("РџСЂРёР»РѕР¶РµРЅРёРµ СѓРґР°Р»РµРЅРѕ РёР· Р°РІС‚РѕР·Р°РіСЂСѓР·РєРё.");
+                buttonAutoStart.Text = "Р”РѕР±Р°РІРёС‚СЊ РІ Р°РІС‚РѕР·Р°РіСЂСѓР·РєСѓ";
             }
             else
             {
                 SetAutoStart(true);
-                MessageBox.Show("Приложение добавлено в автозагрузку.");
-                buttonAutoStart.Text = "Удалить из автозагрузки";
+                MessageBox.Show("РџСЂРёР»РѕР¶РµРЅРёРµ РґРѕР±Р°РІР»РµРЅРѕ РІ Р°РІС‚РѕР·Р°РіСЂСѓР·РєСѓ.");
+                buttonAutoStart.Text = "РЈРґР°Р»РёС‚СЊ РёР· Р°РІС‚РѕР·Р°РіСЂСѓР·РєРё";
             }
         }
 
-        // Проверка автозагрузки через реестр
+        // РџСЂРѕРІРµСЂРєР° Р°РІС‚РѕР·Р°РіСЂСѓР·РєРё С‡РµСЂРµР· СЂРµРµСЃС‚СЂ
         private bool IsAutoStartEnabled()
         {
             string runKey = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run";
@@ -145,7 +155,7 @@ namespace MilkBot
             }
         }
 
-        // Установка/удаление автозагрузки
+        // РЈСЃС‚Р°РЅРѕРІРєР°/СѓРґР°Р»РµРЅРёРµ Р°РІС‚РѕР·Р°РіСЂСѓР·РєРё
         private void SetAutoStart(bool enable)
         {
             string runKey = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run";
@@ -153,7 +163,7 @@ namespace MilkBot
             {
                 if (enable)
                 {
-                    // Добавляем параметр /minimized, чтобы приложение запускалось свернутым
+                    // Р”РѕР±Р°РІР»СЏРµРј РїР°СЂР°РјРµС‚СЂ /minimized, С‡С‚РѕР±С‹ РїСЂРёР»РѕР¶РµРЅРёРµ Р·Р°РїСѓСЃРєР°Р»РѕСЃСЊ СЃРІРµСЂРЅСѓС‚С‹Рј
                     key.SetValue(Application.ProductName, "\"" + Application.ExecutablePath + "\" /minimized");
                 }
                 else
@@ -163,7 +173,7 @@ namespace MilkBot
             }
         }
 
-        // Обработка двойного клика по NotifyIcon — восстанавливаем окно
+        // РћР±СЂР°Р±РѕС‚РєР° РґРІРѕР№РЅРѕРіРѕ РєР»РёРєР° РїРѕ NotifyIcon вЂ” РІРѕСЃСЃС‚Р°РЅР°РІР»РёРІР°РµРј РѕРєРЅРѕ
         private void notifyIcon_DoubleClick(object sender, EventArgs e)
         {
             ShowMainForm();
@@ -179,7 +189,7 @@ namespace MilkBot
             Application.Exit();
         }
 
-        // Метод для восстановления формы
+        // РњРµС‚РѕРґ РґР»СЏ РІРѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРёСЏ С„РѕСЂРјС‹
         private void ShowMainForm()
         {
             this.Show();
@@ -187,7 +197,7 @@ namespace MilkBot
             this.BringToFront();
         }
 
-        // Остальные методы для работы бота, статистики и т.д.
+        // РћСЃС‚Р°Р»СЊРЅС‹Рµ РјРµС‚РѕРґС‹ РґР»СЏ СЂР°Р±РѕС‚С‹ Р±РѕС‚Р°, СЃС‚Р°С‚РёСЃС‚РёРєРё Рё С‚.Рґ.
 
         public decimal GetCartonAmount()
         {
@@ -232,6 +242,12 @@ namespace MilkBot
         {
             if (_botService != null)
                 await _botService.StopAsync();
+        }
+
+        private void buttonUser_Click(object sender, EventArgs e)
+        {
+            var users = DataAccess.GetAllUsers();
+            dataGridViewSummary.DataSource = users;
         }
     }
 }
