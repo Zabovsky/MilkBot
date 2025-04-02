@@ -11,6 +11,7 @@ namespace MilkBot
         {
             InitializeComponent();
         }
+        private ConnectionMonitor _connectionMonitor;
 
         private async void MainForm_Load(object sender, EventArgs e)
         {
@@ -102,6 +103,11 @@ namespace MilkBot
                 // запускаем бота
                 _botService = new TelegramBotService(token, this, Convert.ToInt64(adminIdText));
                 await _botService.StartAsync();
+
+
+                // Запуск мониторинга соединения
+                _connectionMonitor = new ConnectionMonitor(_botService);
+                _connectionMonitor.Start();
 
                 labelStatus.Text = "Бот запущен";
                 labelStatus.ForeColor = Color.Green;
@@ -206,6 +212,13 @@ namespace MilkBot
             return 1m;
         }
 
+        private async void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (_botService != null)
+                await _botService.StopAsync();
+
+            _connectionMonitor?.Stop(); // безопасно остановим монитор
+        }
 
         private void buttonRefresh_Click(object sender, EventArgs e)
         {

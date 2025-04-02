@@ -269,7 +269,23 @@ namespace MilkBot
             }
         }
         private static readonly string LastCallbackFile = "last_callback_id.txt";
-
+        public async Task SendMessageToAdmin(string text)
+        {
+            if (_adminId > 0)
+            {
+                try
+                {
+                    await _botClient.SendMessage(
+                        chatId: _adminId,
+                        text: text,
+                        parseMode: Telegram.Bot.Types.Enums.ParseMode.Markdown);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("[Ошибка отправки админу]: " + ex.Message);
+                }
+            }
+        }
         private bool IsDuplicateCallback(string callbackId)
         {
             try
