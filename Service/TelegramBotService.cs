@@ -20,7 +20,7 @@ namespace MilkBot
         private int? _lastAdminMessageId;
         private string _lastAdminMessageText;
         private readonly Dictionary<string, DateTime> _lastBuyTime = new();
-        private readonly TimeSpan _cooldown = TimeSpan.FromSeconds(10);
+        private readonly TimeSpan _cooldown = TimeSpan.FromSeconds(1);
         private string _lastHandledCallbackId;
 
         public TelegramBotService(string token, MainFormNew form, long adminId = 0)
@@ -403,10 +403,14 @@ namespace MilkBot
 
         private async Task ErrorHandler(ITelegramBotClient _, Exception exception, HandleErrorSource source, CancellationToken cancellationToken)
         {
-            Console.WriteLine($"[Ошибка бота] {source}: {exception.Message}");
-            File.AppendAllText("bot_errors.log", $"[{DateTime.Now}] {source}: {exception}\n");
+            var timestamp = DateTime.Now;
+            var errorType = exception.GetType().Name;
+            var fullMessage = exception.ToString();
 
-            // Просто уведомляем админа, без перезапуска
+            // Лог в консоль и файл
+            Console.WriteLine($"[{timestamp}] PollingError: {errorType}: {exception.Message}");
+            File.AppendAllText("bot_errors.log", $"[{timestamp}] PollingError: {fullMessage}\n");
+
             if (_adminId > 0)
             {
                 var keyboard = MarkupAdapter.ToTelegramInline(new InlineKeyboardMarkup(new[]
@@ -418,23 +422,26 @@ namespace MilkBot
             }
         }));
 
+                var userMessage = $"❌ *Ошибка при работе с Telegram API*\n" +
+                                  $"*Тип:* `{errorType}`\n" +
+                                  $"```\n{exception.Message}```";
+
                 try
                 {
                     await _botClient.SendMessage(
                         chatId: _adminId,
-                        text: $"❌ *Ошибка в боте:*\n```\n{exception.Message}```",
+                        text: userMessage,
                         parseMode: ParseMode.Markdown,
                         replyMarkup: keyboard,
                         cancellationToken: cancellationToken);
                 }
                 catch (Exception ex)
                 {
-                    await _botClient.SendMessage(_adminId, $"❌ *Ошибка в боте:*```{exception.Message}```",
-                        parseMode: ParseMode.Markdown,
-                        replyMarkup: keyboard);
+                    Console.WriteLine("Не удалось уведомить админа: " + ex.Message);
                 }
             }
         }
+
 
         private string FormatSummary(DataTable dt, string header)
         {
