@@ -106,8 +106,8 @@ namespace MilkBot
 
 
                 // Запуск мониторинга соединения
-                _connectionMonitor = new ConnectionMonitor(_botService);
-                _connectionMonitor.Start();
+                //_connectionMonitor = new ConnectionMonitor(_botService);
+                //_connectionMonitor.Start();
 
                 labelStatus.Text = "Бот запущен";
                 labelStatus.ForeColor = Color.Green;
@@ -212,13 +212,7 @@ namespace MilkBot
             return 1m;
         }
 
-        private async void MainForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (_botService != null)
-                await _botService.StopAsync();
 
-            _connectionMonitor?.Stop(); // безопасно остановим монитор
-        }
 
         private void buttonRefresh_Click(object sender, EventArgs e)
         {
@@ -255,8 +249,9 @@ namespace MilkBot
         {
             if (_botService != null)
                 await _botService.StopAsync();
-        }
 
+            _connectionMonitor?.Stop(); // безопасно остановим монитор
+        }
         private void buttonUser_Click(object sender, EventArgs e)
         {
             var users = DataAccess.GetAllUsers();
