@@ -1,11 +1,11 @@
-﻿using MilkBot.TelegramMarkup;
+﻿using Microsoft.Data.Sqlite;
+using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
-using System.Text.Json;
-using Telegram.Bot.Types.Enums;
-using Telegram.Bot.Types.ReplyMarkups;
+using System.Text;
 
-namespace MilkBot
+namespace TelegramBotWindowsService.Service
 {
     public static class DataAccess
     {
